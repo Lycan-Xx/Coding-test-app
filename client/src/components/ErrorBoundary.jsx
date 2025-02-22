@@ -3,7 +3,7 @@ import React from 'react';
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false, error: null, errorInfo: null };
   }
 
   static getDerivedStateFromError(error) {
@@ -11,8 +11,38 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error);
-    console.error('Error info:', errorInfo);
+    // Enhanced error logging
+    console.error('Error caught by boundary:', {
+      error: error?.toString(),
+      componentStack: errorInfo?.componentStack,
+      message: error?.message,
+      name: error?.name,
+      stack: error?.stack
+    });
+
+    this.setState({
+      error,
+      errorInfo
+    });
+
+    // Add a global handler for uncaught errors
+    window.addEventListener('error', (event) => {
+      console.error('Global error caught:', {
+        error: event?.error,
+        message: event?.message,
+        filename: event?.filename,
+        lineno: event?.lineno,
+        colno: event?.colno
+      });
+    });
+
+    // Handle ResizeObserver errors specifically
+    window.addEventListener('unhandledrejection', (event) => {
+      if (event.reason?.message?.includes('ResizeObserver')) {
+        event.preventDefault();
+        console.warn('ResizeObserver error handled:', event.reason);
+      }
+    });
   }
 
   render() {
@@ -23,6 +53,11 @@ class ErrorBoundary extends React.Component {
           <p className="mt-2 text-sm text-red-500 dark:text-red-300">
             {this.state.error?.message || 'An unexpected error occurred'}
           </p>
+          {this.state.errorInfo?.componentStack && (
+            <pre className="mt-2 text-xs text-red-400 dark:text-red-300 overflow-auto">
+              {this.state.errorInfo.componentStack}
+            </pre>
+          )}
         </div>
       );
     }
