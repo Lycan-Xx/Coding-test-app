@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as monaco from "monaco-editor";
 import { Card } from "@/components/ui/card";
+import { initMonaco, createEditorConfig } from "@/lib/monaco";
 
 interface CodeEditorProps {
   value: string;
@@ -8,23 +9,19 @@ interface CodeEditorProps {
   language?: string;
 }
 
+// Initialize Monaco globally
+initMonaco();
+
 export default function CodeEditor({ value, onChange, language = "javascript" }: CodeEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const editor = useRef<monaco.editor.IStandaloneCodeEditor>();
 
   useEffect(() => {
-    if (editorRef.current) {
+    if (editorRef.current && !editor.current) {
+      const config = createEditorConfig(language);
       editor.current = monaco.editor.create(editorRef.current, {
+        ...config,
         value,
-        language,
-        theme: "vs-dark",
-        minimap: { enabled: false },
-        automaticLayout: true,
-        fontSize: 14,
-        lineNumbers: "on",
-        scrollBeyondLastLine: false,
-        roundedSelection: false,
-        padding: { top: 16 },
       });
 
       editor.current.onDidChangeModelContent(() => {
@@ -33,7 +30,7 @@ export default function CodeEditor({ value, onChange, language = "javascript" }:
 
       return () => editor.current?.dispose();
     }
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     if (editor.current) {
