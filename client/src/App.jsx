@@ -9,6 +9,8 @@ import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import ErrorBoundary from "@/components/ErrorBoundary.jsx";
 
+
+
 function Router() {
   return (
     <div className="flex h-screen bg-background">
