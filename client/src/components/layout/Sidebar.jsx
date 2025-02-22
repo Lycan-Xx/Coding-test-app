@@ -19,12 +19,12 @@ function Sidebar() {
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location === item.href;
-          
+
           return (
             <Link key={item.href} href={item.href}>
-              <a
+              <div
                 className={cn(
-                  "flex items-center px-4 py-2 text-sm rounded-md",
+                  "flex items-center px-4 py-2 text-sm rounded-md cursor-pointer",
                   isActive
                     ? "bg-sidebar-accent text-sidebar-accent-foreground"
                     : "text-sidebar-foreground hover:bg-sidebar-accent/50"
@@ -32,7 +32,7 @@ function Sidebar() {
               >
                 <Icon className="mr-3 h-5 w-5" />
                 {item.label}
-              </a>
+              </div>
             </Link>
           );
         })}
