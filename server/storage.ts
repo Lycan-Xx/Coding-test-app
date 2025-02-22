@@ -32,10 +32,17 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentUserId++;
+    const defaultSettings = {
+      theme: "dark" as const,
+      difficulty: "easy" as const,
+      language: "javascript",
+      aiModel: "gpt-4o",
+    };
+
     const user: User = {
       id,
       username: insertUser.username,
-      settings: insertUser.settings || null,
+      settings: insertUser.settings || defaultSettings,
     };
     this.users.set(id, user);
     return user;
@@ -54,7 +61,7 @@ export class MemStorage implements IStorage {
     const id = this.currentSubmissionId++;
     const newSubmission: Submission = {
       id,
-      userId: submission.userId,
+      userId: submission.userId ?? null,
       question: submission.question,
       code: submission.code,
       result: submission.result,
