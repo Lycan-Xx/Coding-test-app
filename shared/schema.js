@@ -5,12 +5,7 @@ import { z } from "zod";
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
-  settings: jsonb("settings").$type<{
-    theme: "dark" | "light";
-    difficulty: "easy" | "medium" | "hard";
-    language: string;
-    aiModel: string;
-  }>(),
+  settings: jsonb("settings").$type(),
 });
 
 export const submissions = pgTable("submissions", {
@@ -22,14 +17,4 @@ export const submissions = pgTable("submissions", {
   feedback: text("feedback").notNull(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  settings: true,
-});
-
 export const insertSubmissionSchema = createInsertSchema(submissions);
-
-export type User = typeof users.$inferSelect;
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type Submission = typeof submissions.$inferSelect;
-export type InsertSubmission = z.infer<typeof insertSubmissionSchema>;

@@ -83,7 +83,7 @@ function CodeEditorContent({ value, onChange, language = "javascript" }) {
 
   return (
     <Card className="h-full">
-      <div ref={editorRef} className="h-full min-h-[400px]" />
+      <div ref={editorRef} className="h-full" />
     </Card>
   );
 }

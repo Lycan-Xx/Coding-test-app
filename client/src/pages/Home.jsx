@@ -10,12 +10,12 @@ import { runCode } from "@/lib/codeSandbox";
 
 export default function Home() {
   const [code, setCode] = useState("");
-  const [output, setOutput] = useState<string[]>([]);
+  const [output, setOutput] = useState([]);
   const { toast } = useToast();
 
   const question = {
     title: "Two Sum",
-    difficulty: "easy" as const,
+    difficulty: "easy",
     description: "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
     examples: [
       {
@@ -63,24 +63,32 @@ export default function Home() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="space-x-2">
-            <Button onClick={handleRun} size="sm">
-              <Play className="h-4 w-4 mr-2" />
-              Run
-            </Button>
-            <Button onClick={handleSubmit} size="sm" variant="secondary">
-              <Send className="h-4 w-4 mr-2" />
-              Submit
-            </Button>
+    <div className="h-[calc(100vh-4rem)] overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full p-4">
+        <div className="flex flex-col h-full gap-4">
+          <div className="flex items-center justify-between">
+            <div className="space-x-2">
+              <Button onClick={handleRun} size="sm">
+                <Play className="h-4 w-4 mr-2" />
+                Run
+              </Button>
+              <Button onClick={handleSubmit} size="sm" variant="secondary">
+                <Send className="h-4 w-4 mr-2" />
+                Submit
+              </Button>
+            </div>
+          </div>
+          <div className="flex-grow">
+            <CodeEditor value={code} onChange={setCode} />
+          </div>
+          <div className="h-[200px]">
+            <Console output={output} />
           </div>
         </div>
-        <CodeEditor value={code} onChange={setCode} />
-        <Console output={output} />
+        <div className="h-full overflow-y-auto">
+          <QuestionPanel question={question} />
+        </div>
       </div>
-      <QuestionPanel question={question} />
     </div>
   );
 }
