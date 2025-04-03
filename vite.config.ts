@@ -26,11 +26,35 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "client", "src"),
       "@shared": path.resolve(__dirname, "shared"),
+      // Add Monaco Editor alias
+      'monaco-editor': path.resolve(__dirname, 'node_modules/monaco-editor')
     },
   },
   root: path.resolve(__dirname, "client"),
   build: {
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'monaco-editor': ['monaco-editor']
+        }
+      }
+    }
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      }
+    },
+    fs: {
+      // Allow serving files from node_modules
+      allow: ['..']
+    }
+  },
+  optimizeDeps: {
+    include: ['monaco-editor/esm/vs/editor/editor.worker']
+  }
 });
