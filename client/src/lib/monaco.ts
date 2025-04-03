@@ -5,20 +5,16 @@ export function initMonaco() {
   // Define the base path for Monaco workers
   (self as any).MonacoEnvironment = {
     getWorkerUrl: function (_moduleId: any, label: string) {
-      const workerPath = `/monaco-editor/esm/vs/editor/editor.worker.js`;
+      const workers = {
+        typescript: '/monaco-editor/esm/vs/language/typescript/ts.worker',
+        javascript: '/monaco-editor/esm/vs/language/typescript/ts.worker',
+        html: '/monaco-editor/esm/vs/language/html/html.worker',
+        css: '/monaco-editor/esm/vs/language/css/css.worker',
+        json: '/monaco-editor/esm/vs/language/json/json.worker',
+      };
 
-      if (label === 'javascript') {
-        return `/monaco-editor/esm/vs/language/typescript/ts.worker.js`;
-      }
-      if (label === 'typescript') {
-        return `/monaco-editor/esm/vs/language/typescript/ts.worker.js`;
-      }
-      if (label === 'python') {
-        return `/monaco-editor/esm/vs/basic-languages/python/python.js`;
-      }
-
-      return workerPath;
-    },
+      return workers[label] || '/monaco-editor/esm/vs/editor/editor.worker';
+    }
   };
 }
 
