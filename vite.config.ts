@@ -26,8 +26,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "client", "src"),
       "@shared": path.resolve(__dirname, "shared"),
-      // Add Monaco Editor alias
-      'monaco-editor': path.resolve(__dirname, 'node_modules/monaco-editor')
+      "monaco-editor": path.resolve(__dirname, "node_modules/monaco-editor"),
     },
   },
   root: path.resolve(__dirname, "client"),
@@ -37,24 +36,29 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'monaco-editor': ['monaco-editor']
-        }
-      }
-    }
+          "monaco-editor": ["monaco-editor"],
+        },
+      },
+    },
   },
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true
-      }
+      "/api": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+      },
     },
     fs: {
-      // Allow serving files from node_modules
-      allow: ['..']
-    }
+      allow: ["..", "../../node_modules"],
+    },
   },
   optimizeDeps: {
-    include: ['monaco-editor/esm/vs/editor/editor.worker']
-  }
+    include: [
+      "monaco-editor/esm/vs/editor/editor.worker",
+      "monaco-editor/esm/vs/language/typescript/ts.worker",
+      "monaco-editor/esm/vs/language/json/json.worker",
+      "monaco-editor/esm/vs/language/css/css.worker",
+      "monaco-editor/esm/vs/language/html/html.worker",
+    ],
+  },
 });

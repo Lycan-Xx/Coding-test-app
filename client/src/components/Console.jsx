@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 
 function Console({ output }) {
   return (
-    <Card className="bg-card h-[200px]">
+    <Card className="bg-card h-full">
       <ScrollArea className="h-full p-4">
         <div className="font-mono text-sm space-y-1">
           {output.map((line, i) => (
