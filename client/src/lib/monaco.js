@@ -2,26 +2,26 @@ import * as monaco from "monaco-editor";
 
 // Initialize Monaco Editor
 export function initMonaco() {
-  try {
-    self.MonacoEnvironment = {
+  if (typeof window !== 'undefined') {
+    window.MonacoEnvironment = {
       getWorkerUrl: function (_moduleId, label) {
-        if (label === "json") {
-          return "/node_modules/monaco-editor/esm/vs/language/json/json.worker.js";
+        const workerPath = '/monaco-editor/esm/vs';
+        
+        if (label === 'typescript' || label === 'javascript') {
+          return `${workerPath}/language/typescript/ts.worker?worker`;
         }
-        if (label === "css" || label === "scss" || label === "less") {
-          return "/node_modules/monaco-editor/esm/vs/language/css/css.worker.js";
+        if (label === 'json') {
+          return `${workerPath}/language/json/json.worker?worker`;
         }
-        if (label === "html" || label === "handlebars" || label === "razor") {
-          return "/node_modules/monaco-editor/esm/vs/language/html/html.worker.js";
+        if (label === 'css' || label === 'scss' || label === 'less') {
+          return `${workerPath}/language/css/css.worker?worker`;
         }
-        if (label === "typescript" || label === "javascript") {
-          return "/node_modules/monaco-editor/esm/vs/language/typescript/ts.worker.js";
+        if (label === 'html' || label === 'handlebars' || label === 'razor') {
+          return `${workerPath}/language/html/html.worker?worker`;
         }
-        return "/node_modules/monaco-editor/esm/vs/editor/editor.worker.js";
+        return `${workerPath}/editor/editor.worker?worker`;
       },
     };
-  } catch (error) {
-    console.error('Failed to initialize Monaco environment:', error);
   }
 }
 
